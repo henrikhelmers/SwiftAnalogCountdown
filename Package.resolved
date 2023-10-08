@@ -1,0 +1,14 @@
+{
+  "pins" : [
+    {
+      "identity" : "swiftblob",
+      "kind" : "remoteSourceControl",
+      "location" : "ssh://git@github.com/henrikhelmers/SwiftBlob",
+      "state" : {
+        "branch" : "main",
+        "revision" : "58b8679da2f25a0dac6ce52e21ed4d0f52d799c7"
+      }
+    }
+  ],
+  "version" : 2
+}
