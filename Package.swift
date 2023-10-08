@@ -11,9 +11,9 @@ let package = Package(
             targets: ["SwiftanalogCountdown"]),
     ],
     dependencies: [
-        .package(url: "ssh://git@github.com/henrikhelmers/SwiftBlob", branch: "main")
+        .package(url: "https://github.com/henrikhelmers/SwiftBlob", .branch("main")),
     ],
     targets: [
-        .target(name: "SwiftanalogCountdown")
+        .target(name: "SwiftanalogCountdown", dependencies: ["SwiftBlob"])
     ]
 )

@@ -3,7 +3,29 @@ import SwiftBlob
 
 struct DrawAnimation: View {
     let size: CGFloat = 350
-    let squishedCirclePoints = BlobShape.createPoints(minGrowth: 9, edges: 8)
+
+    let colorShadow: Color = .black
+    let colorForeground = Color(hex: "#007A85")
+    let colorBackgroundLighter = Color(hex: "#E1F9F8")
+    let colorBackgroundLight = Color(hex: "#B0EEEC")
+    let colorBackground = Color(hex: "#87E7E4")
+    let colorBackgroundDark = Color(hex: "#66CCCC")
+    let colorBackgroundDarker = Color(hex: "#10CFC9")
+
+
+    /*
+    let ixia: NTColor = NTColor(
+        w50: Color(hex: "#F9FFFC"),
+        w100: Color(hex: "#E1F9F8"),
+        w200: Color(hex: "#B0EEEC"),
+        w300: Color(hex: "#87E7E4"),
+        w400: Color(hex: "#66CCCC"),
+        w500: Color(hex: "#10CFC9"),
+        w600: Color(hex: "#007A85"),
+        w700: Color(hex: "#00454B"),
+        w800: Color(hex: "#00454B"),
+        w900: Color(hex: "#00454B"))
+    */
 
     @State var isVisible: CGFloat = 0
     @State var date: Date = .now
@@ -40,22 +62,22 @@ struct DrawAnimation: View {
                     dialDecorations
                     hands
                     Circle()
-                        .shadow(color: .nt.primary.w700, radius: 0, y: 8 * isVisible)
-                        .foregroundColor(.nt.primary.w600)
+                        .shadow(color: colorShadow, radius: 0, y: 8 * isVisible)
+                        .foregroundColor(colorForeground)
                         .frame(maxWidth: size * 0.15)
                         .scaleEffect(isVisible)
                         .animation(.bouncy, value: isVisible)
                     Circle()
-                        .foregroundColor(.nt.pink.w300)
+                        .foregroundColor(colorBackgroundLighter)
                         .frame(maxWidth: size * 0.05)
                         .scaleEffect(isVisible)
                         .animation(.bouncy, value: isVisible)
-                    Button("Se om du vant") {
+                    Button("Toggle") {
                         withAnimation {
                             isVisible = isVisible == 0 ? 1 : 0
                         }
                     }
-                    .buttonStyle(NTButton(.primary))
+                    .buttonStyle(.borderedProminent)
                     .offset(y: 260)
                     Text(date.getFormattedDate(format: "HH:mm"))
                         .offset(y: 300)
@@ -68,15 +90,15 @@ struct DrawAnimation: View {
                     date = date.addingTimeInterval(60)
                 }
             }
-            .frame(size)
+            .frame(width: size, height: size)
     }
 
 
     var hands: some View {
         ZStack {
             Rectangle()
-                .shadow(color: .nt.primary.w700, radius: 0, y: 8)
-                .foregroundColor(.nt.primary.w600)
+                .shadow(color: colorShadow, radius: 0, y: 8)
+                .foregroundColor(colorForeground)
                 .frame(maxHeight: size * 0.075)
                 .frame(width: size / 4)
                 .offset(x: -(size / 6))
@@ -85,8 +107,8 @@ struct DrawAnimation: View {
                 .animation(.bouncy, value: hourAngle)
                 .scaleEffect(isVisible)
             Rectangle()
-                .shadow(color: .nt.primary.w700, radius: 0, y: 8)
-                .foregroundColor(.nt.primary.w600)
+                .shadow(color: colorShadow, radius: 0, y: 8)
+                .foregroundColor(colorForeground)
                 .frame(maxHeight: size * 0.04)
                 .frame(width: size / 3)
                 .offset(x: -(size / 5))
@@ -101,7 +123,7 @@ struct DrawAnimation: View {
         ZStack {
             ForEach(Range(0...40), id: \.self) {
                 Rectangle()
-                    .foregroundColor(.nt.primary.w300)
+                    .foregroundColor(colorBackgroundLight)
                     .frame(size * 0.015)
                     .offset(x: -(size * 0.36))
                     .rotationEffect(.degrees(Double($0) * 9) - (secondAngle * 0.8))
@@ -113,7 +135,7 @@ struct DrawAnimation: View {
             }
             ForEach(Range(0...30), id: \.self) {
                 Rectangle()
-                    .foregroundColor(.nt.primary.w200)
+                    .foregroundColor(colorBackgroundLighter)
                     .frame(size * 0.016)
                     .offset(x: -(size * 0.25))
                     .rotationEffect(.degrees(Double($0) * 12) - secondAngle)
@@ -128,27 +150,27 @@ struct DrawAnimation: View {
 
     var dialBackgrounds: some View {
         ZStack {
-            BlobShape(controlPoints: squishedCirclePoints)
+            BlobView(spikyness: 0.2, isAnimated: false)
                 .aspectRatio(1, contentMode: .fit)
-                .foregroundColor(.nt.primary.w600)
-                .shadow(color: .nt.primary.w700, radius: 0, y: 8)
+                .foregroundColor(colorForeground)
+                .shadow(color: colorShadow, radius: 0, y: 8)
                 .scaleEffect(isVisible)
                 .animation(.bouncy(duration: 0.5, extraBounce: 0.3), value: isVisible)
-            BlobShape(controlPoints: squishedCirclePoints)
+            BlobView(spikyness: 0.2, isAnimated: false)
                 .aspectRatio(1, contentMode: .fit)
-                .foregroundColor(.nt.primary.w400)
+                .foregroundColor(colorBackground)
                 .frame(maxWidth: size * 0.92)
                 .scaleEffect(isVisible)
                 .animation(.smooth, value: isVisible)
-            BlobShape(controlPoints: squishedCirclePoints)
+            BlobView(spikyness: 0.2, isAnimated: false)
                 .aspectRatio(1, contentMode: .fit)
-                .foregroundColor(.nt.primary.w300)
+                .foregroundColor(colorBackgroundLight)
                 .frame(maxWidth: size * 0.77)
                 .scaleEffect(isVisible)
                 .animation(.smooth, value: isVisible)
-            BlobShape(controlPoints: squishedCirclePoints)
+            BlobView(spikyness: 0.2, isAnimated: false)
                 .aspectRatio(1, contentMode: .fit)
-                .foregroundColor(.nt.primary.w200)
+                .foregroundColor(colorBackgroundLighter)
                 .frame(maxWidth: size * 0.4)
                 .scaleEffect(isVisible)
                 .animation(.bouncy, value: isVisible)
@@ -158,4 +180,5 @@ struct DrawAnimation: View {
 
 #Preview {
     DrawAnimation()
+        .frame(600)
 }
