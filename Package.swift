@@ -3,17 +3,17 @@
 import PackageDescription
 
 let package = Package(
-    name: "SwiftanalogCountdown",
+    name: "SwiftAnalogCountdown",
     platforms: [.iOS(.v16), .macOS(.v14)],
     products: [
         .library(
-            name: "SwiftanalogCountdown",
-            targets: ["SwiftanalogCountdown"]),
+            name: "SwiftAnalogCountdown",
+            targets: ["SwiftAnalogCountdown"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/henrikhelmers/SwiftBlob", .branch("main")),
+        .package(url: "https://github.com/henrikhelmers/SwiftBlob", branch: "main"),
     ],
     targets: [
-        .target(name: "SwiftanalogCountdown", dependencies: ["SwiftBlob"])
+        .target(name: "SwiftAnalogCountdown", dependencies: ["SwiftBlob"])
     ]
 )

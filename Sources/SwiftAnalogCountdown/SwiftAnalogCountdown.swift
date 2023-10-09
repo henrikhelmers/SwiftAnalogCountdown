@@ -1,31 +1,38 @@
 import SwiftUI
 import SwiftBlob
 
-struct DrawAnimation: View {
-    let size: CGFloat = 350
+struct SACPalette {
+    let shadow: Color
+    let foreground: Color
+    let background: Color
+    let backgroundLight: Color
+    let backgroundLighter: Color
 
-    let colorShadow: Color = .black
-    let colorForeground = Color(hex: "#007A85")
-    let colorBackgroundLighter = Color(hex: "#E1F9F8")
-    let colorBackgroundLight = Color(hex: "#B0EEEC")
-    let colorBackground = Color(hex: "#87E7E4")
-    let colorBackgroundDark = Color(hex: "#66CCCC")
-    let colorBackgroundDarker = Color(hex: "#10CFC9")
+    static let altA = SACPalette(shadow: .black,
+                                 foreground: .init(hex: "#34beed"),
+                                 background: .init(hex: "#84defd"),
+                                 backgroundLight: .init(hex: "#a4eaff"),
+                                 backgroundLighter: .init(hex: "#c4ffff").opacity(0.75))
+    static let altB = SACPalette(shadow: .black,
+                                 foreground: .red,
+                                 background: .white.opacity(0.75),
+                                 backgroundLight: .white.opacity(0.25),
+                                 backgroundLighter: .white.opacity(0.25))
+    static let altC = SACPalette(shadow: .black,
+                                 foreground: .init(hex: "#007A85"),
+                                 background: .init(hex: "#87E7E4"),
+                                 backgroundLight: .init(hex: "#B0EEEC"),
+                                 backgroundLighter: .init(hex: "#E1F9F8"))
+}
 
+struct SACAnimation: View {
+    let size: CGFloat = 400
 
-    /*
-    let ixia: NTColor = NTColor(
-        w50: Color(hex: "#F9FFFC"),
-        w100: Color(hex: "#E1F9F8"),
-        w200: Color(hex: "#B0EEEC"),
-        w300: Color(hex: "#87E7E4"),
-        w400: Color(hex: "#66CCCC"),
-        w500: Color(hex: "#10CFC9"),
-        w600: Color(hex: "#007A85"),
-        w700: Color(hex: "#00454B"),
-        w800: Color(hex: "#00454B"),
-        w900: Color(hex: "#00454B"))
-    */
+    let colors = SACPalette.altA
+
+    let blobPointsOuter = BlobView.getPoints(for: 0.1)
+    let blobPointsInner = BlobView.getPoints(for: 0.2)
+    let blobPointsCenter = BlobView.getPoints(for: 0.15)
 
     @State var isVisible: CGFloat = 0
     @State var date: Date = .now
@@ -61,14 +68,14 @@ struct DrawAnimation: View {
                     dialBackgrounds
                     dialDecorations
                     hands
-                    Circle()
-                        .shadow(color: colorShadow, radius: 0, y: 8 * isVisible)
-                        .foregroundColor(colorForeground)
+                    BlobView(spikyness: 0.2, isAnimated: false, points: blobPointsCenter)
+                        .shadow(color: colors.shadow, radius: 0, y: 8 * isVisible)
+                        .foregroundColor(colors.foreground)
                         .frame(maxWidth: size * 0.15)
                         .scaleEffect(isVisible)
                         .animation(.bouncy, value: isVisible)
-                    Circle()
-                        .foregroundColor(colorBackgroundLighter)
+                    BlobView(spikyness: 0.2, isAnimated: false, points: blobPointsCenter)
+                        .foregroundColor(colors.backgroundLighter)
                         .frame(maxWidth: size * 0.05)
                         .scaleEffect(isVisible)
                         .animation(.bouncy, value: isVisible)
@@ -78,9 +85,9 @@ struct DrawAnimation: View {
                         }
                     }
                     .buttonStyle(.borderedProminent)
-                    .offset(y: 260)
+                    .offset(y: size * 0.5)
                     Text(date.getFormattedDate(format: "HH:mm"))
-                        .offset(y: 300)
+                        .offset(y: size * 0.55)
                 }
             }
             .onAppear {
@@ -97,18 +104,19 @@ struct DrawAnimation: View {
     var hands: some View {
         ZStack {
             Rectangle()
-                .shadow(color: colorShadow, radius: 0, y: 8)
-                .foregroundColor(colorForeground)
+            
+                .shadow(color: colors.shadow, radius: 0, y: 8)
+                .foregroundColor(colors.foreground)
                 .frame(maxHeight: size * 0.075)
                 .frame(width: size / 4)
                 .offset(x: -(size / 6))
-                .rotationEffect(hourAngle)
-                .rotationEffect(.degrees(90))
+                // .rotationEffect(hourAngle)
+                // .rotationEffect(.degrees(90))
                 .animation(.bouncy, value: hourAngle)
                 .scaleEffect(isVisible)
             Rectangle()
-                .shadow(color: colorShadow, radius: 0, y: 8)
-                .foregroundColor(colorForeground)
+                .shadow(color: colors.shadow, radius: 0, y: 8)
+                .foregroundColor(colors.foreground)
                 .frame(maxHeight: size * 0.04)
                 .frame(width: size / 3)
                 .offset(x: -(size / 5))
@@ -123,9 +131,9 @@ struct DrawAnimation: View {
         ZStack {
             ForEach(Range(0...40), id: \.self) {
                 Rectangle()
-                    .foregroundColor(colorBackgroundLight)
+                    .foregroundColor(colors.backgroundLighter)
                     .frame(size * 0.015)
-                    .offset(x: -(size * 0.36))
+                    .offset(x: -(size * 0.32))
                     .rotationEffect(.degrees(Double($0) * 9) - (secondAngle * 0.8))
                     .scaleEffect(x: 0.95)
                     .scaleEffect(isVisible == 1 ? 1 : 2)
@@ -135,9 +143,9 @@ struct DrawAnimation: View {
             }
             ForEach(Range(0...30), id: \.self) {
                 Rectangle()
-                    .foregroundColor(colorBackgroundLighter)
+                    .foregroundColor(colors.backgroundLighter)
                     .frame(size * 0.016)
-                    .offset(x: -(size * 0.25))
+                    .offset(x: -(size * 0.2))
                     .rotationEffect(.degrees(Double($0) * 12) - secondAngle)
                     .scaleEffect(y: 0.95)
                     .scaleEffect(isVisible == 1 ? 1 : 2)
@@ -150,28 +158,28 @@ struct DrawAnimation: View {
 
     var dialBackgrounds: some View {
         ZStack {
-            BlobView(spikyness: 0.2, isAnimated: false)
+            BlobView(spikyness: 0.2, isAnimated: false, points: blobPointsOuter)
                 .aspectRatio(1, contentMode: .fit)
-                .foregroundColor(colorForeground)
-                .shadow(color: colorShadow, radius: 0, y: 8)
+                .foregroundColor(colors.foreground)
+                .shadow(color: colors.shadow, radius: 0, y: 8)
                 .scaleEffect(isVisible)
                 .animation(.bouncy(duration: 0.5, extraBounce: 0.3), value: isVisible)
-            BlobView(spikyness: 0.2, isAnimated: false)
+            BlobView(spikyness: 0.2, isAnimated: false, points: blobPointsOuter)
                 .aspectRatio(1, contentMode: .fit)
-                .foregroundColor(colorBackground)
+                .foregroundColor(colors.background)
                 .frame(maxWidth: size * 0.92)
                 .scaleEffect(isVisible)
                 .animation(.smooth, value: isVisible)
-            BlobView(spikyness: 0.2, isAnimated: false)
+            BlobView(spikyness: 0.2, isAnimated: false, points: blobPointsInner)
                 .aspectRatio(1, contentMode: .fit)
-                .foregroundColor(colorBackgroundLight)
-                .frame(maxWidth: size * 0.77)
+                .foregroundColor(colors.backgroundLight)
+                .frame(maxWidth: size * 0.6)
                 .scaleEffect(isVisible)
                 .animation(.smooth, value: isVisible)
-            BlobView(spikyness: 0.2, isAnimated: false)
+            BlobView(spikyness: 0.2, isAnimated: false, points: blobPointsInner)
                 .aspectRatio(1, contentMode: .fit)
-                .foregroundColor(colorBackgroundLighter)
-                .frame(maxWidth: size * 0.4)
+                .foregroundColor(colors.backgroundLighter)
+                .frame(maxWidth: size * 0.35)
                 .scaleEffect(isVisible)
                 .animation(.bouncy, value: isVisible)
         }
@@ -179,6 +187,6 @@ struct DrawAnimation: View {
 }
 
 #Preview {
-    DrawAnimation()
-        .frame(600)
+    SACAnimation()
+        .frame(500)
 }
