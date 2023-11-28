@@ -34,9 +34,15 @@ public struct SACAnimation: View {
     let blobPointsInner = BlobView.getPoints(for: 0.2)
     let blobPointsCenter = BlobView.getPoints(for: 0.15)
 
-    @State var isVisible: CGFloat = 0
-    @State var date: Date = .now
+    @State var isVisible: CGFloat
+    @State var date: Date
     @State var timer: Timer?
+
+    public init(isVisible: CGFloat = 0, date: Date = .now, timer: Timer? = nil) {
+        _isVisible = State(initialValue: isVisible)
+        _date = State(initialValue: date)
+        _timer = State(initialValue: timer)
+    }
 
     var hourAngle: Angle {
         let hour = Calendar.current.component(.hour, from: date)
