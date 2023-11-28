@@ -25,7 +25,7 @@ struct SACPalette {
                                  backgroundLighter: .init(hex: "#E1F9F8"))
 }
 
-struct SACAnimation: View {
+public struct SACAnimation: View {
     let size: CGFloat = 400
 
     let colors = SACPalette.altA
@@ -60,7 +60,7 @@ struct SACAnimation: View {
         return .degrees(Double(degrees))
     }
 
-    var body: some View {
+    public var body: some View {
         Circle()
             .foregroundColor(.clear)
             .overlay {
