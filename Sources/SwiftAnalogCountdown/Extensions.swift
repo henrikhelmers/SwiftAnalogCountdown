@@ -1,6 +1,6 @@
 import SwiftUI
 
-public extension Color {
+extension Color {
     init(hex hexString: String) {
         let trimHex = hexString.trimmingCharacters(in: .whitespacesAndNewlines)
         let dropHash = String(trimHex.dropFirst()).trimmingCharacters(in: .whitespacesAndNewlines)
@@ -31,7 +31,7 @@ extension Date {
     }
 }
 
-public extension View {
+extension View {
     func frame(_ size: CGFloat?, alignment: Alignment = .center) -> some View {
         frame(width: size, height: size, alignment: alignment)
     }
